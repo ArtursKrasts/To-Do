@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 import ToDoObj from './ToDoObj.js'
-import { Button, Checkbox, Input } from '@material-ui/core';
+import { Button, Input } from '@material-ui/core';
 
 class ToDoList extends React.Component{
     constructor(props){
