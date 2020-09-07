@@ -1,100 +1,84 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import '../App.css';
 import { Button, Input, Checkbox } from '@material-ui/core';
 import { v4 as uuidv4 } from 'uuid';
 
-class ToDoList extends React.Component{
-    constructor(props){
-        super(props)
+function ToDoList(props) {
 
-        this.state = {
-            listCheckedKeys: [],
-            listToDo: [],
-            newText: ""
-        }
+    const [newText, setNewText] = useState("");
+    const [listToDo, setListToDo] = useState([]);
+    const [listCheckedKeys, setListCheckedKeys] = useState([]);
 
-    }
+    useEffect(
+        () => {
+            return(console.log(listToDo.concat("after")));
+        },
+        [listToDo],
+    )
 
-    addText(){
-        const toDoKey=uuidv4();
+    useEffect(
+        () => {
+            return(console.log(listCheckedKeys.concat("after")));
+        },
+        [listCheckedKeys],
+    )
 
-        this.setState({
-            listToDo: this.state.listToDo.concat(
-              <div key={toDoKey}>
+    function addText(){
+        const toDoKey = uuidv4();
+
+        setListToDo(listToDo.concat(
+            <div key={toDoKey}>
                 <Checkbox
                   color="primary"
                   inputProps={{ 'aria-label': 'Checkbox' }}
-                  onChange={event => this.checked(toDoKey)}
+                  onChange={event => checked(toDoKey)}
                 />
-                {this.state.newText}
-              </div>)
-        })
+                {newText}
+            </div>
+        ));
     }
-
-    changeText(newText){
-        this.setState({
-            newText: newText
-        })
-    }
-
-    delete(){
-        console.log("ToDoList_delete");
-        console.log(this.state.listToDo.concat("before"));
-        this.state.listCheckedKeys.map(Key => {
-            this.setState(prevState => ({
-                listToDo: prevState.listToDo.filter((item) => item.key !== Key)
-            }),
-                () => {
-                    console.log(this.state.listToDo.concat("after_removed"));
-                }
-            )
-        })
-    }
-
-    checked(toDoKey){
-        console.log("ToDoList_checked:"+{toDoKey});
-        var test = true;
-        console.log(this.state.listCheckedKeys.concat("before"));
-        this.state.listCheckedKeys.map(Key => {
+    
+    function checked(toDoKey){
+        var add = true;
+        var list;
+        console.log("ToDoList_checked:".concat(toDoKey));
+        setListCheckedKeys(listCheckedKeys => list=listCheckedKeys);
+        console.log(list.concat("before"));
+        list.map(Key => {
             if(Key === toDoKey){
-                this.setState(prevState => ({
-                        listCheckedKeys: prevState.listCheckedKeys.filter((item) => item !== toDoKey)
-                }),
-                    () => {
-                        console.log(this.state.listCheckedKeys.concat("after_removed"));
-                    }
-                )
-                test = false;
+                setListCheckedKeys(listCheckedKeys => listCheckedKeys.filter((item) => item !== toDoKey));
+                add = false;
             }
         })
-        if(test){
-            this.setState(prevState => ({
-                listCheckedKeys: prevState.listCheckedKeys.concat(toDoKey)
-            }),
-                () => {
-                    console.log(this.state.listCheckedKeys.concat("after_added"));
-                }
-            )
-        }  
+        if(add){
+            setListCheckedKeys(listCheckedKeys => listCheckedKeys.concat(toDoKey));
+        }
     }
 
-    render(){
-        return(
-            <div>
-                <h2>To-Do List</h2>
-                <p><b>Done</b></p>
-                {this.state.listToDo}
-                <form className="ToDoList" noValidate autoComplete="off">
-                    <Input 
-                        id="Input_ToDo"
-                        label="MyInput"
-                        type="string" 
-                        onChange={event => this.changeText(event.target.value)}/>
-                </form>
-                <p><Button onClick={() => this.addText()} variant="contained" color="primary">Add</Button></p>
-                <p><Button onClick={() => this.delete()} variant="contained" color="primary">Delete selected</Button></p>
-            </div>
-        )
-  }
+    function deleteDone() {
+        console.log("ToDoList_delete");
+        console.log(listToDo.concat("before"));
+        listCheckedKeys.map(Key => {
+            setListToDo(listToDo => listToDo.filter((item) => item.key !== Key))
+            setListCheckedKeys(listCheckedKeys => listCheckedKeys.filter((item) => item !== Key));
+        })
+    }
+    
+    return(
+        <div>
+            <h2>To-Do List</h2>
+            <p><b>Done</b></p>
+            {listToDo}
+            <form className="ToDoList" noValidate autoComplete="off">
+                <Input 
+                    id="Input_ToDo"
+                    type="string"
+                    onChange={event => setNewText(event.target.value)}/>
+            </form>
+            <p><Button onClick={() => addText()} variant="contained" color="primary">Add</Button></p>
+            <p><Button onClick={() => deleteDone()} variant="contained" color="primary">Delete selected</Button></p>
+        </div>
+    )
 }
+
 export default ToDoList;
