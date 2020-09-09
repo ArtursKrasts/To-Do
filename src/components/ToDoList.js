@@ -11,14 +11,14 @@ function ToDoList(props) {
 
     useEffect(
         () => {
-            return(console.log(listToDo.concat("after")));
+            console.log(listToDo.concat("after"));
         },
         [listToDo],
     )
 
     useEffect(
         () => {
-            return(console.log(listCheckedKeys.concat("after")));
+            console.log(listCheckedKeys.concat("after"));
         },
         [listCheckedKeys],
     )
