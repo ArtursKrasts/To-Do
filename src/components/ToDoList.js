@@ -26,7 +26,7 @@ function ToDoList(props) {
     function addText(){
         const toDoKey = uuidv4();
 
-        setListToDo(listToDo.concat(
+        setListToDo([...listToDo, 
             <div key={toDoKey}>
                 <Checkbox
                   color="primary"
@@ -35,7 +35,7 @@ function ToDoList(props) {
                 />
                 {newText}
             </div>
-        ));
+        ]);
     }
     
     function checked(toDoKey){
@@ -51,7 +51,7 @@ function ToDoList(props) {
             }
         })
         if(add){
-            setListCheckedKeys(listCheckedKeys => listCheckedKeys.concat(toDoKey));
+            setListCheckedKeys(listCheckedKeys => [...listCheckedKeys, toDoKey]);
         }
     }
 
