@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import "../App.css";
+import React, { useState, useEffect } from "react";
 import { Button, Input, Checkbox } from "@material-ui/core";
 import { v4 as uuidv4 } from "uuid";
 
@@ -7,6 +6,14 @@ function ToDoList(props) {
   const [newText, setNewText] = useState("");
   const [listToDo, setListToDo] = useState([]);
   const [listCheckedKeys, setListCheckedKeys] = useState([]);
+
+  useEffect(() => {
+    console.log(listToDo.concat("after"));
+  }, [listToDo]);
+
+  useEffect(() => {
+    console.log(listCheckedKeys.concat("after"));
+  }, [listCheckedKeys]);
 
   function addText() {
     const toDoKey = uuidv4();
@@ -27,7 +34,9 @@ function ToDoList(props) {
   function checked(toDoKey) {
     var add = true;
     var list;
+    console.log("ToDoList_checked:".concat(toDoKey));
     setListCheckedKeys((listCheckedKeys) => (list = listCheckedKeys));
+    console.log(list.concat("before"));
     list.map((Key) => {
       if (Key === toDoKey) {
         setListCheckedKeys((listCheckedKeys) =>
@@ -42,6 +51,8 @@ function ToDoList(props) {
   }
 
   function deleteDone() {
+    console.log("ToDoList_delete");
+    console.log(listToDo.concat("before"));
     listCheckedKeys.map((Key) => {
       setListToDo((listToDo) => listToDo.filter((item) => item.key !== Key));
       setListCheckedKeys((listCheckedKeys) =>
