@@ -1,42 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { Button, Input, Checkbox } from "@material-ui/core";
+import React, { useState } from "react";
+import { Button, Input } from "@material-ui/core";
+import ToDo from "./to-do-item.js";
 import { v4 as uuidv4 } from "uuid";
 
-function ToDoList(props) {
+const ToDoList = (props) => {
   const [newText, setNewText] = useState("");
   const [listToDo, setListToDo] = useState([]);
   const [listCheckedKeys, setListCheckedKeys] = useState([]);
 
-  useEffect(() => {
-    console.log(listToDo.concat("after"));
-  }, [listToDo]);
-
-  useEffect(() => {
-    console.log(listCheckedKeys.concat("after"));
-  }, [listCheckedKeys]);
-
-  function addText() {
+  const addText = () => {
     const toDoKey = uuidv4();
-
     setListToDo([
       ...listToDo,
-      <div key={toDoKey}>
-        <Checkbox
-          color="primary"
-          inputProps={{ "aria-label": "Checkbox" }}
-          onChange={(event) => checked(toDoKey)}
-        />
-        {newText}
-      </div>,
+      <ToDo key={toDoKey} myKey={toDoKey} text={newText} checked={checked} />,
     ]);
-  }
+  };
 
-  function checked(toDoKey) {
+  const checked = (toDoKey) => {
     var add = true;
     var list;
-    console.log("ToDoList_checked:".concat(toDoKey));
     setListCheckedKeys((listCheckedKeys) => (list = listCheckedKeys));
-    console.log(list.concat("before"));
     list.map((Key) => {
       if (Key === toDoKey) {
         setListCheckedKeys((listCheckedKeys) =>
@@ -48,18 +31,16 @@ function ToDoList(props) {
     if (add) {
       setListCheckedKeys((listCheckedKeys) => [...listCheckedKeys, toDoKey]);
     }
-  }
+  };
 
-  function deleteDone() {
-    console.log("ToDoList_delete");
-    console.log(listToDo.concat("before"));
+  const deleteDone = () => {
     listCheckedKeys.map((Key) => {
       setListToDo((listToDo) => listToDo.filter((item) => item.key !== Key));
       setListCheckedKeys((listCheckedKeys) =>
         listCheckedKeys.filter((item) => item !== Key)
       );
     });
-  }
+  };
 
   return (
     <div>
@@ -91,6 +72,6 @@ function ToDoList(props) {
       </p>
     </div>
   );
-}
+};
 
 export default ToDoList;
