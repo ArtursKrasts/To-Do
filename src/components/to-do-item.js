@@ -7,7 +7,8 @@ const ToDo = (props) => {
       <Checkbox
         color="primary"
         inputProps={{ "aria-label": "Checkbox" }}
-        onChange={() => props.checked(props.myKey)}
+        value={props.checked}
+        onChange={() => props.onCheck(props.uuid)}
       />
       {props.text}
     </div>

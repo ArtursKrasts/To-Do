@@ -9,14 +9,11 @@ const ToDoList = (props) => {
   const [listCheckedKeys, setListCheckedKeys] = useState([]);
 
   const addText = () => {
-    const toDoKey = uuidv4();
-    setListToDo([
-      ...listToDo,
-      <ToDo key={toDoKey} myKey={toDoKey} text={newText} checked={checked} />,
-    ]);
+    const uuid = uuidv4();
+    setListToDo([...listToDo, { uuid, text: newText, checked: false }]);
   };
 
-  const checked = (toDoKey) => {
+  const onCheck = (toDoKey) => {
     var add = true;
     var list;
     setListCheckedKeys((listCheckedKeys) => (list = listCheckedKeys));
@@ -45,10 +42,18 @@ const ToDoList = (props) => {
   return (
     <div>
       <h2>To-Do List</h2>
-      <p>
-        <b>Done</b>
-      </p>
-      {listToDo}
+
+      <b>Done</b>
+
+      {listToDo.map((toDo) => (
+        <ToDo
+          key={toDo.uuid}
+          uuid={toDo.uuid}
+          text={toDo.text}
+          checked={toDo.checked}
+          onCheck={onCheck}
+        />
+      ))}
       <form className="ToDoList" noValidate autoComplete="off">
         <Input
           id="Input_ToDo"
@@ -56,20 +61,14 @@ const ToDoList = (props) => {
           onChange={(event) => setNewText(event.target.value)}
         />
       </form>
-      <p>
-        <Button onClick={() => addText()} variant="contained" color="primary">
-          Add
-        </Button>
-      </p>
-      <p>
-        <Button
-          onClick={() => deleteDone()}
-          variant="contained"
-          color="primary"
-        >
-          Delete selected
-        </Button>
-      </p>
+
+      <Button onClick={() => addText()} variant="contained" color="primary">
+        Add
+      </Button>
+
+      <Button onClick={() => deleteDone()} variant="contained" color="primary">
+        Delete selected
+      </Button>
     </div>
   );
 };
