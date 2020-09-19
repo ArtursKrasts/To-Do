@@ -6,37 +6,24 @@ import { v4 as uuidv4 } from "uuid";
 const ToDoList = (props) => {
   const [newText, setNewText] = useState("");
   const [listToDo, setListToDo] = useState([]);
-  const [listCheckedKeys, setListCheckedKeys] = useState([]);
 
   const addText = () => {
     const uuid = uuidv4();
     setListToDo([...listToDo, { uuid, text: newText, checked: false }]);
   };
 
-  const onCheck = (toDoKey) => {
-    var add = true;
-    var list;
-    setListCheckedKeys((listCheckedKeys) => (list = listCheckedKeys));
-    list.map((Key) => {
-      if (Key === toDoKey) {
-        setListCheckedKeys((listCheckedKeys) =>
-          listCheckedKeys.filter((item) => item !== toDoKey)
-        );
-        add = false;
+  const onCheck = (uuid) => {
+    const newList = listToDo.map((toDo) => {
+      if (toDo.uuid === uuid) {
+        toDo.checked = !toDo.checked;
       }
+      return toDo;
     });
-    if (add) {
-      setListCheckedKeys((listCheckedKeys) => [...listCheckedKeys, toDoKey]);
-    }
+    setListToDo(newList);
   };
 
   const deleteDone = () => {
-    listCheckedKeys.map((Key) => {
-      setListToDo((listToDo) => listToDo.filter((item) => item.key !== Key));
-      setListCheckedKeys((listCheckedKeys) =>
-        listCheckedKeys.filter((item) => item !== Key)
-      );
-    });
+    setListToDo(listToDo.filter((toDo) => toDo.checked !== true));
   };
 
   return (
